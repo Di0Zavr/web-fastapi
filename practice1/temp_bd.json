@@ -1,0 +1,64 @@
+[
+    {
+        "id": 1,
+        "name":"Data Fusion",
+        "description":"hackathon for ai developers and data scientists",
+        "participation_conditions":"be a good boy",
+        "location":"Moscow",
+        "organizer": {
+            "id": 1,
+            "username": "Cool Moscow Univeristy",
+            "password": "482c811da5d5b4bc6d497ffa98491e38",
+            "email":"MoscowUniversity@gmail.com",
+            "phone":"89999999999",
+            "role":"organizer"
+        },
+        "start_date":"25-03-2025 12:00:00",
+        "end_date":"27-03-2025 12:00:00",
+        "tasks":[
+            {
+                "id": 1,
+                "name": "AI task",
+                "description":"very important task",
+                "technical_task":"do some ai things",
+                "requirements":"can use python",
+                "grading_criteria": "1 is bad and 5 is good"
+            },
+            {
+                "id":2,
+                "name": "Data task",
+                "description":"very important data task",
+                "technical_task":"do some interesting things with provided data",
+                "requirements":"can use python and brain",
+                "grading_criteria":"1 is bad and 5 is good"
+            }
+        ]
+    },
+    {
+        "id":2,
+        "name":"Sibirean Gamejam",
+        "description":"do your cool game here",
+        "participation_conditions":"be enthusiastic",
+        "location":"Novosibirsk",
+        "organizer":{
+            "id":2,
+            "username":"Novosibirsk State University",
+            "password":"596a96cc7bf9108cd896f33c44aedc8a",
+            "email":"GameJamSibirb@gmail.com",
+            "phone": "89999999998",
+            "role":"organizer"
+        },
+        "start_date":"25-04-2025 12:00:00",
+        "end_date":"27-04-2025 12:00:00",
+        "tasks":[
+            {
+                "id":3,
+                "name":"Platformer game",
+                "description":"do basic things with interesting idea",
+                "technical_task":"do game where you can jump on platforms",
+                "requirements":"can click on a keyboard, optionally - know Unity",
+                "grading_criteria":"100 points is maximum"
+            }
+        ]
+    }
+]

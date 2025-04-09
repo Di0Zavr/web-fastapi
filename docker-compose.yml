@@ -1,0 +1,30 @@
+version: '1.0'
+
+services:
+  practice_db:
+    container_name: practice-db
+    image: postgres:15
+    restart: always
+    shm_size: 128mb
+    env_file:
+      - "practice3/.env"
+    ports:
+      - 15432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql@15/data
+    
+  web-db:
+    container_name: web-db
+    image: postgres:15
+    restart: always
+    shm_size: 128mb
+    env_file:
+      - "app/.env"
+    ports:
+      - 25432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql@15/data 
+
+volumes:
+  pgdata:
+    

@@ -117,3 +117,7 @@ class TeamTaskSolutionResponse(TeamTaskSolutionDefault):
 class SolutionFixResponse(SolutionFixDefault):
     id: int | None = None
     solution: Optional["TeamTaskSolution"] = None
+
+class UserLogin(SQLModel):
+    username: str
+    password: str

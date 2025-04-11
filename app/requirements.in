@@ -3,3 +3,6 @@ sqlmodel
 psycopg2
 alembic
 python-dotenv
+pyJWT
+bcrypt
+passlib

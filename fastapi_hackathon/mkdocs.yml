@@ -1,0 +1,10 @@
+site_name: My Docs
+nav:
+ - About: about.md
+ - Database: db.md
+ - Models: models.md
+ - API: api.md
+ - Authroization/Registration: auth.md
+
+theme:
+  material

@@ -1,10 +1,15 @@
 site_name: My Docs
 nav:
- - About: about.md
- - Database: db.md
- - Models: models.md
- - API: api.md
- - Authroization/Registration: auth.md
+  - LR1:
+    - About: LR1/about.md
+    - Database: LR1/db.md
+    - Models: LR1/models.md
+    - API: LR1/api.md
+    - Authroization/Registration: LR1/auth.md
+
+  - LR2:
+    - Task 1: LR2/task1.md
+    - Task 2: LR2/task2.md
 
 theme:
   material

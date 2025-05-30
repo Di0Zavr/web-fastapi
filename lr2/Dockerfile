@@ -9,4 +9,4 @@ COPY . .
 
 EXPOSE 9001
 
-CMD ["fastapi", "run", "app.py", "--port", "9001"]
+# CMD ["fastapi", "run", "app.py", "--port", "9001"]

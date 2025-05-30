@@ -91,3 +91,17 @@ def parse(size: int=10, slice: int=1):
         return r.json()
     else:
         return {"ok": False}
+
+@app.post("/parse_url")
+def parse_url(url: str):
+    session = requests.Session()
+    try:
+        r = session.post("http://parser-app:9001/parse_url",
+                         params={"url": url})
+    except requests.exceptions.ConnectionError:
+        return {"detail": "connection error"}
+    
+    if r.ok:
+        return r.json()
+    else:
+        return {"ok": False}

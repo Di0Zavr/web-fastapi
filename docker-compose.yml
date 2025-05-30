@@ -25,6 +25,12 @@ services:
     ports:
       - 9000:9000
 
+  redis-broker:
+    container_name: redis-broker
+    image: redis:8
+    ports:
+      - 6379:6379
+
   parser-app:
     container_name: parser-app
     build: ./lr2
@@ -36,21 +42,16 @@ services:
     mem_limit: 1G
     cpus: 2
     ports:
-      - 9001:9001
-
-  redis-broker:
-    container_name: redis-broker
-    image: redis:8
-    ports:
-      - 6379:6379
+      - 9001:9000
+    command: "fastapi run app.py --port 9000"
     
   celery-worker:
     container_name: celery-worker
     build: ./lr2
     restart: always
     depends_on:
-      - parser
-    command: celery -A 
+      - parser-app
+    command: celery -A worker.worker worker --loglevel=info
 
 volumes:
   pgdata:

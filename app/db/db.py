@@ -5,7 +5,7 @@ import os
 load_dotenv('app/.env')
 
 db_url = os.getenv("POSTGRES_URL")
-engine = create_engine(db_url, echo=True)
+engine = create_engine(db_url, echo=False)
 
 def init_db():
     SQLModel.metadata.create_all(engine)

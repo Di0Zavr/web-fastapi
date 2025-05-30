@@ -60,7 +60,7 @@ class AuthHandler:
         except KeyError:
             return None
     
-    def get_current_user_id(self, auth: HTTPAuthorizationCredentials = Security(security)):
+    def get_current_user_role(self, auth: HTTPAuthorizationCredentials = Security(security)):
         payload = self.get_current_user(auth)
         try:
             return payload["role"]

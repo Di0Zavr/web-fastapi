@@ -1,18 +1,6 @@
 version: '1.0'
 
 services:
-  practice_db:
-    container_name: practice-db
-    image: postgres:15
-    restart: always
-    shm_size: 128mb
-    env_file:
-      - "practice3/.env"
-    ports:
-      - 15432:5432
-    volumes:
-      - pgdata:/var/lib/postgresql@15/data
-    
   web-db:
     container_name: web-db
     image: postgres:15
@@ -25,6 +13,35 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql@15/data 
 
+  main-app:
+    container_name: main-app
+    build: .
+    restart: always
+    depends_on:
+      - web-db
+    pids_limit: 500
+    mem_limit: 1G
+    cpus: 2
+    ports:
+      - 9000:9000
+
+  parser-app:
+    container_name: parser-app
+    build: ./lr2
+    restart: always
+    depends_on:
+      - web-db
+    pids_limit: 500
+    mem_limit: 1G
+    cpus: 2
+    ports:
+      - 9001:9001
+
+  redis-broker:
+    container_name: redis-broker
+    image: redis:8
+    ports:
+      - 6379:6379
+
 volumes:
   pgdata:
-    

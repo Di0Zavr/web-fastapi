@@ -2,8 +2,8 @@ import requests
 import random
 import string
 import aiohttp
-from models import *
-from db import get_session, get_async_session
+from .models import *
+from .db import get_session
 from bs4 import BeautifulSoup
 from datetime import datetime
 
@@ -54,7 +54,7 @@ def _parse_html(data):
         "participant_conditions": None,
         "location": None,
         "dates": None,
-        "organizer_id": 18  # тестовый юзер
+        "organizer_id": 1  # тестовый юзер
     }
     dto["title"] = soup.find("h1", attrs={"class": "js-feed-post-title t-feed__post-popup__title t-title t-title_xxs"}).text.strip()
     descr = soup.find("div", attrs={"class": "t-redactor__tte-view"})
@@ -88,21 +88,6 @@ def _load_in_db(dto):
     session.add(model)
     session.commit()
     session.refresh(model)
-
-# async def _async_load_in_db(dto):
-#     session = await anext(get_async_session())
-#     data = HackathonDefault(
-#         name=dto["title"],
-#         description=dto["description"],
-#         participant_conditions=dto["participant_conditions"],
-#         location=dto["location"],
-#         dates=dto["dates"],
-#         organizer_id=dto["organizer_id"]
-#     )
-#     model = Hackathon.model_validate(data)
-#     session.add(model)
-#     await session.commit()
-#     await session.refresh(model)
 
 def fetch_parse_load(url):
     data, status = _fetch_data(url)

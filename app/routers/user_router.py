@@ -7,6 +7,14 @@ from starlette import status
 
 user_router = APIRouter(prefix="/user", tags=["user"])
 
+@user_router.post("/", response_model=UserResponse)
+def create_user(model: UserDefault, session=Depends(get_session)) -> User:
+    model = User.model_validate(model)
+    session.add(model)
+    session.commit()
+    session.refresh(model)
+    return model
+
 @user_router.get("/list", response_model=List[UserResponse])
 def get_user_list(session=Depends(get_session)) -> List[User]:
     return session.exec(select(User)).all()

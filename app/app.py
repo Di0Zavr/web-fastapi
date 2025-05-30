@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import RedirectResponse #
 from db.db import init_db, get_session
 from db.models import *
-from typing import TypedDict, Union #
+from typing import TypedDict #
 from sqlmodel import select, or_ #
 from starlette import status #
 from auth.auth_handler import AuthHandler #
@@ -11,6 +11,7 @@ from routers.hackathon_router import hackathon_router
 from routers.team_router import team_router
 from routers.task_router import task_router
 from routers.solution_router import solution_router, fix_router
+import requests
 
 HTTPResponse = TypedDict('HTTPResponse', {"status": int, "detail": str})
 HTTP404 = {"status": 404, "detail": "not found"}
@@ -78,3 +79,15 @@ def login(model: UserLogin, session=Depends(get_session)):
                                 status_code=status.HTTP_302_FOUND)
     response.set_cookie(key="session", value=jwt_token, secure=True)
 
+@app.post("/parse")
+def parse(size: int=10, slice: int=1):
+    session = requests.Session()
+    try:
+        r = session.post("http://parser-app:9001/parse",
+                    params={"size": size, "slice": slice})
+    except requests.exceptions.ConnectionError:
+        return {"detail": "connection error"}
+    if r.ok:
+        return r.json()
+    else:
+        return {"ok": False}

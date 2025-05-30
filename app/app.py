@@ -83,7 +83,7 @@ def login(model: UserLogin, session=Depends(get_session)):
 def parse(size: int=10, slice: int=1):
     session = requests.Session()
     try:
-        r = session.post("http://parser-app:9001/parse",
+        r = session.post("http://parser-app:9000/parse",
                     params={"size": size, "slice": slice})
     except requests.exceptions.ConnectionError:
         return {"detail": "connection error"}
@@ -96,7 +96,7 @@ def parse(size: int=10, slice: int=1):
 def parse_url(url: str):
     session = requests.Session()
     try:
-        r = session.post("http://parser-app:9001/parse_url",
+        r = session.post("http://parser-app:9000/parse_url",
                          params={"url": url})
     except requests.exceptions.ConnectionError:
         return {"detail": "connection error"}

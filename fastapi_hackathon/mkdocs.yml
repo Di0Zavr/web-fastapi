@@ -11,5 +11,10 @@ nav:
     - Task 1: LR2/task1.md
     - Task 2: LR2/task2.md
 
+  - LR3:
+    - Task 1: LR3/task1.md
+    - Task 2: LR3/task2.md
+    - Task 3: LR3/task3.md
+
 theme:
   material

@@ -599,7 +599,68 @@
 
 
 <h1 id="_1">Регистрация и авторизация</h1>
-<p>WIP</p>
+<p>Была реализована возможность регистрации и авторизации пользователей в приложении.</p>
+<p>Для этого были написаны вспомогательный функции, который выполняют различные действия при регистрации - создание токена, декодирование токена, хэширование пароля и другие.</p>
+<pre><code class="language-python">def get_password_hash(password):
+    return pwd_context.hash(password)
+
+def verify_password(password, hashed_password):
+    return pwd_context.verify(password, hashed_password)
+
+def encode_token(user_id, role):
+    payload = {
+        &quot;exp&quot;: datetime.datetime.now(datetime.UTC) + datetime.timedelta(days=30),
+        &quot;user_id&quot;: user_id,
+        &quot;role&quot;: role.value
+    }
+    return jwt.encode(payload=payload, key=secret, algorithm=&quot;HS256&quot;)
+
+def decode_token(token):
+    try:
+        payload = jwt.decode(jwt=token, key=secret, algorithms=&quot;HS256&quot;)
+        return payload
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, 
+                detail=&quot;Expired Token&quot;
+            )
+
+    except jwt.InvalidTokenError:
+        raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=&quot;Invalid Token&quot;
+            )
+
+def get_current_user(auth: HTTPAuthorizationCredentials = Security(security)):
+    credentials_error = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail=&quot;Could not validate credentials&quot;
+    )
+
+    payload = decode_token(auth.credentials)
+    if not payload:
+        raise credentials_error
+
+    return payload
+
+def get_current_user_id(auth: HTTPAuthorizationCredentials = Security(security)):
+    payload = get_current_user(auth)
+    try:
+        return payload[&quot;user_id&quot;]
+    except KeyError:
+        return None
+
+def get_current_user_role(auth: HTTPAuthorizationCredentials = Security(security)):
+    payload = get_current_user(auth)
+    try:
+        return payload[&quot;role&quot;]
+    except KeyError:
+        return None
+</code></pre>
+<p>Далее был создан роутер для авторизации. Роутер содержит эндпоинты для регистрации и авторизации.
+<img alt="auth-swagger" src="../images/auth-swagger.png" /></p>
+<p>Также, были созданы пользовательские эндпоинты для получения информации о себе и изменения пароля. Для идентификации пользователя используется токен, полученный при авторизации.</p>
+<p><img alt="user-auth-endpoints" src="../images/user-auth-endpoints.png" /></p>
 
 
 

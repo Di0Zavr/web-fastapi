@@ -1,22 +1,50 @@
 from fastapi import Depends, APIRouter, HTTPException
 from fastapi.responses import JSONResponse
+from auth.auth_handler import get_current_user_id, get_password_hash
 from db.db import get_session
 from db.models import *
+from dto.GeneralDto import PasswordChangeResponse, UserPasswordChange
 from sqlmodel import select
 from starlette import status
 
 user_router = APIRouter(prefix="/user", tags=["user"])
 
-@user_router.post("/", response_model=UserResponse)
-def create_user(model: UserDefault, session=Depends(get_session)) -> User:
-    model = User.model_validate(model)
-    session.add(model)
-    session.commit()
-    session.refresh(model)
-    return model
+@user_router.get("/me", response_model=UserResponse)
+def get_me(
+    session=Depends(get_session),
+    user_id=Depends(get_current_user_id)
+):
+    return session.get(User, user_id)
+
+@user_router.post(
+        "/change-password",
+        response_model=PasswordChangeResponse
+        )
+def change_password(
+    data: UserPasswordChange,
+    session=Depends(get_session),
+    user_id=Depends(get_current_user_id)
+):
+    if data.password != data.password_confirm:
+        raise HTTPException(
+            status_code=400,
+            detail="Пароли не совпадают"
+        )
+    db_record = session.get(User, user_id)
+    password_hash = get_password_hash(data.password)
+    db_record.password = password_hash
+    try:
+        session.add(db_record)
+        session.commit()
+        session.refresh(db_record)
+    except Exception:
+        return {"success": False}
+    return {"success": True}
 
 @user_router.get("/list", response_model=List[UserResponse])
-def get_user_list(session=Depends(get_session)) -> List[User]:
+def get_user_list(
+    session=Depends(get_session)
+) -> List[User]:
     return session.exec(select(User)).all()
 
 @user_router.get("/{id}", response_model=UserResponse)

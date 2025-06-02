@@ -59,7 +59,7 @@ def parse_url(url: str):
     else:
         return {"ok": False}
     
-@app.get("/task/{task_id}")
+@app.get("/parse-task/{task_id}")
 def get_task_status(task_id: str):
     session = requests.Session()
     try:

@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from db.db import init_db
 from db.models import *
 from routers.user_router import user_router
@@ -33,7 +33,10 @@ def parse(size: int=10, slice: int=1):
         r = session.post("http://parser-app:9000/parse",
                     params={"size": size, "slice": slice})
     except requests.exceptions.ConnectionError:
-        return {"detail": "connection error"}
+        raise HTTPException(
+            status_code=502,
+            detail="Connection error"
+        )
     if r.ok:
         return r.json()
     else:
@@ -46,9 +49,25 @@ def parse_url(url: str):
         r = session.post("http://parser-app:9000/parse_url",
                          params={"url": url})
     except requests.exceptions.ConnectionError:
-        return {"detail": "connection error"}
+        raise HTTPException(
+            status_code=502,
+            detail="Connection error"
+        )
     
     if r.ok:
         return r.json()
     else:
         return {"ok": False}
+    
+@app.get("/task/{task_id}")
+def get_task_status(task_id: str):
+    session = requests.Session()
+    try:
+        r = session.get(f"http://parser-app:9000/task/{task_id}")
+    except requests.exceptions.ConnectionError:
+        raise HTTPException(
+            status_code=502,
+            detail="Connection error"
+        )
+    
+    return r.json()
